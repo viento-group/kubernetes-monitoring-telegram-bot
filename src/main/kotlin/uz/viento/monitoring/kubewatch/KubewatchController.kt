@@ -14,7 +14,7 @@ class KubewatchController(private val kubewatchService: KubewatchService) {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping("/kubewatch/{chatIds}")
-    fun onKubewatchAction(@RequestBody data: KubewatchData, @PathVariable chatIds: Set<Long>) {
+    fun onKubewatchAction(@RequestBody data: KubewatchData, @PathVariable chatIds: Set<String>) {
         logger.info("Sending kubewatch action to chats $chatIds: $data")
         kubewatchService.sendKubewatchStatus(chatIds, data)
     }

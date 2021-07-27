@@ -40,6 +40,6 @@ internal class KubewatchControllerTest : AbstractWebTest() {
             text = "A `pod` in namespace `simple-ns` has been `updated`:\n`kube-system/vpnkit-controller`",
             time = OffsetDateTime.parse("2021-07-26T20:32:26.2995036Z")
         )
-        verify(kubewatchService, times(1)).sendKubewatchStatus(setOf(123, 456), expected)
+        verify(kubewatchService, times(1)).sendKubewatchStatus(setOf("123", "456"), expected)
     }
 }
