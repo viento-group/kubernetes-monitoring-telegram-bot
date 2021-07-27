@@ -1,0 +1,3 @@
+telegram:
+  bot-token: ${TELEGRAM_BOT_TOKEN:}
+  kubewatch-bot-token: ${TELEGRAM_KUBEWATCH_BOT_TOKEN:}

@@ -7,18 +7,27 @@ interface KubewatchDataTextConverter {
 }
 
 object SimpleKubewatchDataTextConverter : KubewatchDataTextConverter {
-    override fun convert(data: KubewatchData) = data.text
+    override fun convert(data: KubewatchData) = TelegramTextUtils.escapeSpecialCharacters(data.text)
+        .replace("\\`", "`")
 }
 
 object BoldKubewatchDataTextConverter : KubewatchDataTextConverter {
-    override fun convert(data: KubewatchData) = data.text.replace("`", "*")
+    override fun convert(data: KubewatchData) = TelegramTextUtils.escapeSpecialCharacters(data.text)
+        .replace("\\`", "*")
 }
 
 object DetailedKubewatchDataTextConverter : KubewatchDataTextConverter {
     override fun convert(data: KubewatchData) = buildString {
         append("*New Kubewatch status:*\n")
-        data.eventMeta.map { "${it.key}: *${it.value}*" }
-            .joinToString("\n")
-            .also { append(it) }
+        data.eventMeta.map {
+            val key = TelegramTextUtils.escapeSpecialCharacters(it.key)
+            val value = TelegramTextUtils.escapeSpecialCharacters(it.value)
+            "$key: *$value*"
+        }.joinToString("\n").also { append(it) }
     }
+}
+
+private object TelegramTextUtils {
+    val specialCharacters = setOf("_", "*", "[", "]", "(", ")", "~", "`", ">", "#", "+", "-", "=", "|", "{", "}", ".", "!")
+    fun escapeSpecialCharacters(text: String) = specialCharacters.fold(text) { acc, v -> acc.replace(v, "\\$v") }
 }

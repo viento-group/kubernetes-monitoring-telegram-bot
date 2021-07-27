@@ -26,6 +26,7 @@ internal class KubewatchServiceImplTest : AbstractTest() {
 
     @Test
     fun sendKubewatchStatus() {
+        val expectedText = "A `pod` in namespace `simple\\-ns` has been `updated`:\n`kube\\-system/vpnkit\\-controller`"
         val chatIds = setOf("123", "456")
 
         doNothing().whenever(telegramService).sendMessages(ACTION_TEXT, chatIds, BotType.KUBEWATCH)
@@ -33,12 +34,12 @@ internal class KubewatchServiceImplTest : AbstractTest() {
         val kubewatchData = KubewatchData(emptyMap(), ACTION_TEXT, OffsetDateTime.now())
         kubewatchServiceImpl.sendKubewatchStatus(chatIds, kubewatchData, null)
 
-        verify(telegramService, times(1)).sendMessages(ACTION_TEXT, chatIds, BotType.KUBEWATCH)
+        verify(telegramService, times(1)).sendMessages(expectedText, chatIds, BotType.KUBEWATCH)
     }
 
     @Test
     fun `sendKubewatchStatus - bold text`() {
-        val expectedText = "A *pod* in namespace *simple-ns* has been *updated*:\n*kube-system/vpnkit-controller*"
+        val expectedText = "A *pod* in namespace *simple\\-ns* has been *updated*:\n*kube\\-system/vpnkit\\-controller*"
 
         doNothing().whenever(telegramService).sendMessages(ACTION_TEXT, setOf("1"), BotType.KUBEWATCH)
 
@@ -53,8 +54,8 @@ internal class KubewatchServiceImplTest : AbstractTest() {
         val expectedText = """
             *New Kubewatch status:*
             kind: *pod*
-            name: *kube-system/vpnkit-controller*
-            namespace: *simple-ns*
+            name: *kube\-system/vpnkit\-controller*
+            namespace: *simple\-ns*
             reason: *updated*
         """.trimIndent()
 

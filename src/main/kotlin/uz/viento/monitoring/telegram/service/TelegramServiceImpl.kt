@@ -51,8 +51,8 @@ class TelegramServiceImpl(
             scopeToken: String?,
             scopeTokenName: String,
             telegramProperties: TelegramProperties
-        ) = scopeToken
-            ?: telegramProperties.botToken
+        ) = scopeToken?.ifEmpty { null }
+            ?: telegramProperties.botToken?.ifEmpty { null }
             ?: throw IllegalArgumentException("Can't find nor $scopeTokenName bot token nor global bot token")
     }
 }
