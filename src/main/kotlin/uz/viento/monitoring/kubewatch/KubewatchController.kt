@@ -19,7 +19,7 @@ class KubewatchController(private val kubewatchService: KubewatchService) {
         @PathVariable chatIds: Set<String>,
         @RequestParam("format", required = false) format: String?
     ) {
-        logger.info("Sending kubewatch action to chats $chatIds: $data")
+        logger.debug("Sending kubewatch action to chats $chatIds: $data")
         kubewatchService.sendKubewatchStatus(chatIds, data, format)
     }
 }

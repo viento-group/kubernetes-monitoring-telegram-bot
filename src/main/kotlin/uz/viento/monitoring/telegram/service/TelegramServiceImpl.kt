@@ -5,6 +5,7 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
+import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForObject
 import uz.viento.monitoring.telegram.BotType
@@ -25,6 +26,12 @@ class TelegramServiceImpl(
             try {
                 val method = TelegramSendMessage(chatId, text, ParseMode.MARKDOWN_V2)
                 sendMessage(method, apiUrl)
+            } catch (e: HttpClientErrorException.Unauthorized) {
+                logger.error("Received unauthorized error response when trying to send telegram message. " +
+                        "Make sure, that you have specified correct token!")
+            } catch (e: HttpClientErrorException.BadRequest) {
+                logger.error("Received '400 Bad Request' error response when sending telegram message. " +
+                        "Response body: ${e.responseBodyAsString}")
             } catch (e: Exception) {
                 logger.warn("Error sending message to chat '$chatId' by bot $botType:\n$text", e)
             }
