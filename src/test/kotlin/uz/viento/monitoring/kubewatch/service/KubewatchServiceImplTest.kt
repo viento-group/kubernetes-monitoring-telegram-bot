@@ -37,7 +37,7 @@ internal class KubewatchServiceImplTest : AbstractTest() {
     }
 
     @Test
-    internal fun `sendKubewatchStatus - bold text`() {
+    fun `sendKubewatchStatus - bold text`() {
         val expectedText = "A *pod* in namespace *simple-ns* has been *updated*:\n*kube-system/vpnkit-controller*"
 
         doNothing().whenever(telegramService).sendMessages(ACTION_TEXT, setOf("1"), BotType.KUBEWATCH)
@@ -49,7 +49,7 @@ internal class KubewatchServiceImplTest : AbstractTest() {
     }
 
     @Test
-    internal fun `sendKubewatchStatus - detailed text`() {
+    fun `sendKubewatchStatus - detailed text`() {
         val expectedText = """
             *New Kubewatch status:*
             kind: *pod*

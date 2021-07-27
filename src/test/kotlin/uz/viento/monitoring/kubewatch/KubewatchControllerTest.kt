@@ -44,7 +44,7 @@ internal class KubewatchControllerTest : AbstractWebTest() {
     }
 
     @Test
-    internal fun `onKubewatchAction - bold format`() {
+    fun `onKubewatchAction - bold format`() {
         doNothing().whenever(kubewatchService).sendKubewatchStatus(any(), any(), any())
 
         mockMvc.perform(post("/kubewatch/123,456")
