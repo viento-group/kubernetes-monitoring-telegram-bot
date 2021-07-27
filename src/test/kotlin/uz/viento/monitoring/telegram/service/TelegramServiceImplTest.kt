@@ -7,6 +7,7 @@ import org.mockito.kotlin.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.Primary
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -19,21 +20,11 @@ import uz.viento.monitoring.telegram.BotType
 import uz.viento.monitoring.telegram.model.TelegramSendMessage
 import uz.viento.monitoring.telegram.model.TelegramSendMessage.Companion.ParseMode
 
-@TestPropertySource(properties = [
-    "telegram.bot-token=${TelegramServiceImplTest.TELEGRAM_BOT_TOKEN}",
-    "telegram.kubewatch-bot-token=${TelegramServiceImplTest.KUBEWATCH_TELEGRAM_BOT_TOKEN}"
-])
 internal class TelegramServiceImplTest : AbstractTest() {
     companion object {
         const val TELEGRAM_BOT_TOKEN = "TELEGRAM_BOT_TOKEN"
         const val KUBEWATCH_TELEGRAM_BOT_TOKEN = "KUBEWATCH_TELEGRAM_BOT_TOKEN"
     }
-
-    @Autowired
-    private lateinit var restTemplate: RestTemplate
-
-    @Autowired
-    private lateinit var telegramService: TelegramServiceImpl
 
     @TestConfiguration
     class RestTemplateConfiguration {
@@ -42,21 +33,53 @@ internal class TelegramServiceImplTest : AbstractTest() {
         fun restTemplateMocked() = mock<RestTemplate>()
     }
 
-    @Test
-    fun `sendMessages - kubewatch bot`() {
-        val simpleText = "Simple text"
+    @Import(RestTemplateConfiguration::class)
+    abstract class BaseTelegramServiceImplTest : AbstractTest() {
+        @Autowired
+        protected lateinit var restTemplate: RestTemplate
 
-        telegramService.sendMessages(simpleText, setOf("123", "456"), BotType.KUBEWATCH)
+        @Autowired
+        protected lateinit var telegramService: TelegramServiceImpl
+    }
 
-        val headers = HttpHeaders().apply { contentType = MediaType.APPLICATION_JSON }
+    @TestPropertySource(properties = [
+        "telegram.bot-token=${TELEGRAM_BOT_TOKEN}",
+        "telegram.kubewatch-bot-token=${KUBEWATCH_TELEGRAM_BOT_TOKEN}"
+    ])
+    class TelegramServiceImplTestWithScopedBot : BaseTelegramServiceImplTest() {
+        @Test
+        fun `sendMessages - kubewatch bot`() {
+            val simpleText = "Simple text"
 
-        verify(restTemplate, times(1)).postForObject<Any?>(
-            url = "https://api.telegram.org/bot$KUBEWATCH_TELEGRAM_BOT_TOKEN/sendMessage",
-            HttpEntity(TelegramSendMessage("123", simpleText, ParseMode.MARKDOWN_V2), headers)
-        )
-        verify(restTemplate, times(1)).postForObject<Any?>(
-            url = "https://api.telegram.org/bot$KUBEWATCH_TELEGRAM_BOT_TOKEN/sendMessage",
-            HttpEntity(TelegramSendMessage("456", simpleText, ParseMode.MARKDOWN_V2), headers)
-        )
+            telegramService.sendMessages(simpleText, setOf("123", "456"), BotType.KUBEWATCH)
+
+            val headers = HttpHeaders().apply { contentType = MediaType.APPLICATION_JSON }
+
+            verify(restTemplate, times(1)).postForObject<Any?>(
+                url = "https://api.telegram.org/bot$KUBEWATCH_TELEGRAM_BOT_TOKEN/sendMessage",
+                HttpEntity(TelegramSendMessage("123", simpleText, ParseMode.MARKDOWN_V2), headers)
+            )
+            verify(restTemplate, times(1)).postForObject<Any?>(
+                url = "https://api.telegram.org/bot$KUBEWATCH_TELEGRAM_BOT_TOKEN/sendMessage",
+                HttpEntity(TelegramSendMessage("456", simpleText, ParseMode.MARKDOWN_V2), headers)
+            )
+        }
+    }
+
+    @TestPropertySource(properties = ["telegram.bot-token=${TELEGRAM_BOT_TOKEN}"])
+    class TelegramServiceImplTestWithGlobalToken : BaseTelegramServiceImplTest() {
+        @Test
+        fun `sendMessages - global bot`() {
+            val simpleText = "Simple text"
+
+            telegramService.sendMessages(simpleText, setOf("123"), BotType.KUBEWATCH)
+
+            val headers = HttpHeaders().apply { contentType = MediaType.APPLICATION_JSON }
+
+            verify(restTemplate, times(1)).postForObject<Any?>(
+                url = "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage",
+                HttpEntity(TelegramSendMessage("123", simpleText, ParseMode.MARKDOWN_V2), headers)
+            )
+        }
     }
 }
