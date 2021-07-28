@@ -22,12 +22,10 @@ Here is available environment variables:
 
 Name | Default Value | Description
 ---- | ------------- | -----------
-TELEGRAM_BOT_TOKEN | | Default telegram bot token
+TELEGRAM_BOT_TOKEN | | Default telegram bot token.
 TELEGRAM_KUBEWATCH_BOT_TOKEN | | Telegram bot token for Kubewatch notifications. If not specified, `TELEGRAM_BOT_TOKEN` will be used.
 LOGGING_LEVEL | info | Logging level. Available: `trace`, `debug`, `info`, `warn`, `error`, `fatal`, `off`. `info` is recommended for production use.
 PORT | 8080 | Port, on which application should work.
-
-TODO add logging file variable
 
 ### Using launch command parameters
 You may set launch command parameters to customize the application.
@@ -35,9 +33,11 @@ Here is available launch command parameters:
 
 Name | Default Value | Description
 ---- | ------------- | -----------
-telegram.bot-token | | Default telegram bot token
+telegram.bot-token | | Default telegram bot token.
 telegram.kubewatch-bot-token | | Telegram bot token for Kubewatch notifications. If not specified, `TELEGRAM_BOT_TOKEN` will be used.
 application.logging-level | info | Logging level. Available: `trace`, `debug`, `info`, `warn`, `error`, `fatal`, `off`. `info` is recommended for production use.
+logging.file.path | | Path to logging file.
+logging.file.name | kubernetes-monitoring-telegram-bot.log | Logging file name.
 server.port | 8080 | Port, on which application should work.
 
 See how to pass launch command parameters in [Running application](#running-application) section.
