@@ -2,6 +2,12 @@ telegram:
   bot-token: ${TELEGRAM_BOT_TOKEN:}
   kubewatch-bot-token: ${TELEGRAM_KUBEWATCH_BOT_TOKEN:}
 
+application:
+  logging-level: ${LOGGING_LEVEL:info}
+
 logging:
   level:
-    uz.viento.monitoring.**: ${LOGGING_LEVEL:info}
+    uz.viento.monitoring.**: ${application.logging-level}
+
+server:
+  port: ${PORT:8080}
