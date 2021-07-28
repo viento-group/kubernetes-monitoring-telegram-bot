@@ -1,0 +1,7 @@
+telegram:
+  bot-token: ${TELEGRAM_BOT_TOKEN:}
+  kubewatch-bot-token: ${TELEGRAM_KUBEWATCH_BOT_TOKEN:}
+
+logging:
+  level:
+    uz.viento.monitoring.**: ${LOGGING_LEVEL:info}

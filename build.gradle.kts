@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "uz.viento"
-version = "0.0.1-SNAPSHOT"
+version = "0.2"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
@@ -20,7 +20,9 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
 }
 
 tasks.withType<KotlinCompile> {
