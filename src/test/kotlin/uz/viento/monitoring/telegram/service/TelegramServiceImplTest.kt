@@ -64,6 +64,33 @@ internal class TelegramServiceImplTest : AbstractTest() {
                 HttpEntity(TelegramSendMessage("456", simpleText, ParseMode.MARKDOWN_V2), headers)
             )
         }
+
+        @Test
+        fun `sendMessage - split to parts`() {
+            val part1 = "a".repeat(4096)
+            val part2 = "b".repeat(20)
+
+            telegramService.sendMessages(part1 + part2, setOf("123", "456"), BotType.KUBEWATCH)
+
+            val headers = HttpHeaders().apply { contentType = MediaType.APPLICATION_JSON }
+
+            verify(restTemplate, times(1)).postForObject<Any?>(
+                url = "https://api.telegram.org/bot$KUBEWATCH_TELEGRAM_BOT_TOKEN/sendMessage",
+                HttpEntity(TelegramSendMessage("123", part1, ParseMode.MARKDOWN_V2), headers)
+            )
+            verify(restTemplate, times(1)).postForObject<Any?>(
+                url = "https://api.telegram.org/bot$KUBEWATCH_TELEGRAM_BOT_TOKEN/sendMessage",
+                HttpEntity(TelegramSendMessage("456", part1, ParseMode.MARKDOWN_V2), headers)
+            )
+            verify(restTemplate, times(1)).postForObject<Any?>(
+                url = "https://api.telegram.org/bot$KUBEWATCH_TELEGRAM_BOT_TOKEN/sendMessage",
+                HttpEntity(TelegramSendMessage("123", part2, ParseMode.MARKDOWN_V2), headers)
+            )
+            verify(restTemplate, times(1)).postForObject<Any?>(
+                url = "https://api.telegram.org/bot$KUBEWATCH_TELEGRAM_BOT_TOKEN/sendMessage",
+                HttpEntity(TelegramSendMessage("456", part2, ParseMode.MARKDOWN_V2), headers)
+            )
+        }
     }
 
     @TestPropertySource(properties = ["telegram.bot-token=${TELEGRAM_BOT_TOKEN}"])
