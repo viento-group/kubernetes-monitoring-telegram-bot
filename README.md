@@ -7,6 +7,7 @@ and `kube-prometheus-stack` helm chart version [`17.0.3`](https://artifacthub.io
 ## Navigation
 - [Configuration](#configuration)
 - [API](#api)
+- [Messages Examples](#messages-examples)
 - [Build application](#build-application)
 - [Running application](#running-application)
 - [Build Docker image](#build-docker-image)
@@ -105,6 +106,78 @@ receivers:
       - send_resolved: true
         url: http://localhost:8080/prometheus/123,456?format=simple_summary&filters=firingOnly
 ```
+
+## Messages Examples
+- [Kubewatch Message](#kubewatch-message)
+- [Prometheus Alert Message](#prometheus-alert-message)
+
+### Kubewatch Message
+#### `default`
+> A `pod` in namespace `simple-ns` has been `updated`:\
+`kube-system/vpnkit-controller`
+
+#### `bold`
+> A **pod** in namespace **simple-ns** has been **updated**:\
+**kube-system/vpnkit-controller**
+
+#### `detailed`
+> **New Kubewatch status:**\
+kind: **pod**\
+name: **kube-system/vpnkit-controller**\
+namespace: **simple-ns**\
+reason: **updated**
+
+### Prometheus Alert Message
+#### default
+> **Status: Firing 🔥**\
+\
+**Active Alert List:**\
+**Target disappeared from Prometheus target discovery.**\
+KubeControllerManager has disappeared from Prometheus target discovery.\
+[Runbook URL](https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubecontrollermanagerdown) \
+\
+Alert Name: KubeControllerManagerDown\
+Severity: critical ❗️\
+-------------\
+**An alert that should always be firing to certify that Alertmanager is working properly.**\
+This is an alert meant to ensure that the entire alerting pipeline is functional.
+This alert is always firing, therefore it should always be firing in Alertmanager
+and always fire against a receiver. There are integrations with various notification
+mechanisms that send a notification when this alert is not firing. For example the
+"DeadMansSnitch" integration in PagerDuty.\
+[Runbook URL](https://github.com/kubernetes-monitoring/kubernetes-mixin/blob/master/runbook.md#alert-name-watchdog) \
+\
+Alert Name: Watchdog\
+Severity: none
+
+#### `simple`
+> **Status: Firing 🔥**\
+\
+✅ KubeControllerManagerDown\
+🔥 KubeSchedulerDown\
+🔥 Watchdog
+ 
+#### `simple_summary`
+> **Status: Firing 🔥**\
+\
+✅ Target disappeared from Prometheus target discovery.\
+🔥 Target disappeared from Prometheus target discovery.\
+🔥 An alert that should always be firing to certify that Alertmanager is working properly.
+
+#### `detailed`
+> **Status: Firing 🔥**\
+\
+**Active Alert List:**\
+**Status: Firing 🔥**\
+**Annotations:**\
+**description:** KubeControllerManager has disappeared from Prometheus target discovery.\
+**runbook_url:** https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubecontrollermanagerdown\
+**summary:** Target disappeared from Prometheus target discovery.\
+\
+**Labels:**\
+**alertname:** KubeControllerManagerDown\
+**prometheus:** kube-prometheus-stack/kube-prometheus-stack-prometheus\
+**severity:** critical
 
 ## Build application
 To build application you should have **Java 11** installed on you machine.
