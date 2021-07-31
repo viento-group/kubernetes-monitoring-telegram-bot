@@ -25,6 +25,7 @@ Name | Default Value | Description
 ---- | ------------- | -----------
 TELEGRAM_BOT_TOKEN | | Default telegram bot token.
 TELEGRAM_KUBEWATCH_BOT_TOKEN | | Telegram bot token for Kubewatch notifications. If not specified, `TELEGRAM_BOT_TOKEN` will be used.
+TELEGRAM_PROMETHEUS_BOT_TOKEN | | Telegram bot token for Prometheus alerts notifications. If not specified, `TELEGRAM_BOT_TOKEN` will be used.
 LOGGING_LEVEL | info | Logging level. Available: `trace`, `debug`, `info`, `warn`, `error`, `fatal`, `off`. `info` is recommended for production use.
 PORT | 8080 | Port, on which application should work.
 
@@ -36,6 +37,7 @@ Name | Default Value | Description
 ---- | ------------- | -----------
 telegram.bot-token | | Default telegram bot token.
 telegram.kubewatch-bot-token | | Telegram bot token for Kubewatch notifications. If not specified, `TELEGRAM_BOT_TOKEN` will be used.
+telegram.prometheus-bot-token | | Telegram bot token for Prometheus alerts notifications. If not specified, `TELEGRAM_BOT_TOKEN` will be used.
 application.logging-level | info | Logging level. Available: `trace`, `debug`, `info`, `warn`, `error`, `fatal`, `off`. `info` is recommended for production use.
 logging.file.path | | Path to logging file.
 logging.file.name | | Logging file name.

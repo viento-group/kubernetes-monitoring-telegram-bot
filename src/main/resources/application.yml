@@ -1,6 +1,7 @@
 telegram:
   bot-token: ${TELEGRAM_BOT_TOKEN:}
   kubewatch-bot-token: ${TELEGRAM_KUBEWATCH_BOT_TOKEN:}
+  prometheus-bot-token: ${TELEGRAM_PROMETHEUS_BOT_TOKEN:}
 
 application:
   logging-level: ${LOGGING_LEVEL:info}

@@ -1,6 +1,7 @@
 package uz.viento.monitoring.kubewatch
 
 import uz.viento.monitoring.kubewatch.model.KubewatchData
+import uz.viento.monitoring.telegram.TelegramTextUtils
 
 interface KubewatchDataTextConverter {
     fun convert(data: KubewatchData): String
@@ -25,9 +26,4 @@ object DetailedKubewatchDataTextConverter : KubewatchDataTextConverter {
             "$key: *$value*"
         }.joinToString("\n").also { append(it) }
     }
-}
-
-private object TelegramTextUtils {
-    val specialCharacters = setOf("_", "*", "[", "]", "(", ")", "~", "`", ">", "#", "+", "-", "=", "|", "{", "}", ".", "!")
-    fun escapeSpecialCharacters(text: String) = specialCharacters.fold(text) { acc, v -> acc.replace(v, "\\$v") }
 }

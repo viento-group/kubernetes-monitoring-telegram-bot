@@ -7,5 +7,6 @@ import org.springframework.boot.context.properties.ConstructorBinding
 @ConfigurationProperties("telegram")
 data class TelegramProperties(
     val botToken: String?,
-    val kubewatchBotToken: String?
+    val kubewatchBotToken: String?,
+    val prometheusBotToken: String?
 )
