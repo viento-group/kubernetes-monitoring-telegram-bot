@@ -128,7 +128,7 @@ namespace: **simple-ns**\
 reason: **updated**
 
 ### Prometheus Alert Message
-#### default
+#### `default`
 > **Status: Firing 🔥**\
 \
 **Active Alert List:**\
