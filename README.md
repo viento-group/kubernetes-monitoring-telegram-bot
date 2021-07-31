@@ -1,7 +1,7 @@
 # Kubernetes Monitoring Telegram Bot
-Bot, that send notifications in the telegram, received from [Kubewatch](https://github.com/bitnami-labs/kubewatch) and [Prometheus AlertManager](https://prometheus.io/docs/alerting/latest/alertmanager/).
-
 [![Java CI](https://github.com/viento-group/kubernetes-monitoring-telegram-bot/actions/workflows/java-ci.yml/badge.svg)](https://github.com/viento-group/kubernetes-monitoring-telegram-bot/actions/workflows/java-ci.yml)
+
+Bot, that send notifications in the telegram, received from [Kubewatch](https://github.com/bitnami-labs/kubewatch) and [Prometheus AlertManager](https://prometheus.io/docs/alerting/latest/alertmanager/).
 
 Tested with Kubewatch version [`0.1.0-debian-10-r334`](https://hub.docker.com/layers/bitnami/kubewatch/0.1.0-debian-10-r339/images/sha256-27b5142b9189871eeb6e87cfbb9ca4da9c669224667fde0eca03ed707c40586f?context=explore)
 and `kube-prometheus-stack` helm chart version [`17.0.3`](https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack/17.0.3).
