@@ -39,11 +39,12 @@ class TelegramServiceImpl(
     }
 
     private fun sendMessage(sendMessage: TelegramSendMessage, apiUrl: String) {
-        val headers = HttpHeaders().apply {
-            contentType = MediaType.APPLICATION_JSON
-        }
-        val httpEntity = HttpEntity<TelegramSendMessage>(sendMessage, headers)
-        restTemplate.postForObject<Any?>(apiUrl, httpEntity)
+        splitMessageTextToParts(sendMessage.text)
+            .forEach { messagePart ->
+                val sendMessagePart = sendMessage.copy(text = messagePart)
+                val headers = HttpHeaders().apply { contentType = MediaType.APPLICATION_JSON }
+                restTemplate.postForObject<Any?>(apiUrl, HttpEntity(sendMessagePart, headers))
+            }
     }
 
     private fun BotType.getToken() = when (this) {
@@ -52,6 +53,7 @@ class TelegramServiceImpl(
 
     private companion object {
         private const val TELEGRAM_SEND_MESSAGE_ENDPOINT_TEMPLATE = "https://api.telegram.org/bot%s/sendMessage"
+        private const val MAX_MESSAGE_LENGTH = 4096
         private val logger = LoggerFactory.getLogger(TelegramServiceImpl::class.java)
 
         private fun tryToFindBotToken(
@@ -61,5 +63,22 @@ class TelegramServiceImpl(
         ) = scopeToken?.ifEmpty { null }
             ?: telegramProperties.botToken?.ifEmpty { null }
             ?: throw IllegalArgumentException("Can't find nor $scopeTokenName bot token nor global bot token")
+
+        private fun splitMessageTextToParts(text: String): List<String> {
+            val parts = ArrayList<String>()
+            var leftText: String? = text
+
+            while (leftText != null) {
+                if (leftText.length > MAX_MESSAGE_LENGTH) {
+                    parts += leftText.substring(0, MAX_MESSAGE_LENGTH)
+                    leftText = leftText.substring(MAX_MESSAGE_LENGTH)
+                } else {
+                    parts += leftText
+                    leftText = null
+                }
+            }
+
+            return parts
+        }
     }
 }
