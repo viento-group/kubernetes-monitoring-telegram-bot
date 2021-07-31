@@ -171,7 +171,7 @@ Severity: none
 **Status: Firing 🔥**\
 **Annotations:**\
 **description:** KubeControllerManager has disappeared from Prometheus target discovery.\
-**runbook_url:** https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubecontrollermanagerdown\
+**runbook_url:** https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubecontrollermanagerdown \
 **summary:** Target disappeared from Prometheus target discovery.\
 \
 **Labels:**\
