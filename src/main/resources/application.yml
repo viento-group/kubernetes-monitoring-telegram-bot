@@ -8,8 +8,6 @@ application:
 logging:
   level:
     uz.viento.monitoring.**: ${application.logging-level} # do not touch this line
-  file:
-    name: kubernetes-monitoring-telegram-bot.log
 
 server:
   port: ${PORT:8080}
