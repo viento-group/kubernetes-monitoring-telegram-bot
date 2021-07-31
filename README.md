@@ -85,13 +85,25 @@ For example: `http://localhost:8080/prometheus/123,456?format=simple`.
 
 Available formats: `default`, `simple`, `simple_summary`, `detailed`.
 
+Also, you may use `filters` request parameters, to specify filers.
+For example: `http://localhost:8080/prometheus/123,456?filters=firingOnly`.
+
+Available filters:
+
+| Filter code | Description |
+| ----------- | ----------- |
+`firingOnly` | Show only alerts with status `firing`
+`resolvedOnly` | Show only alerts with status `resolved`
+`withoutAlerts` | Do not show any alerts
+
+
 Prometheus AlertManager example configuration:
 ```yaml
 receivers:
   - name: telegram-bot
     webhook_configs:
       - send_resolved: true
-        url: http://localhost:8080/prometheus/123,456?format=simple_summary
+        url: http://localhost:8080/prometheus/123,456?format=simple_summary&filters=firingOnly
 ```
 
 ## Build application

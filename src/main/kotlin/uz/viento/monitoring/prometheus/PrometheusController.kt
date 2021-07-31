@@ -17,9 +17,11 @@ class PrometheusController(private val prometheusService: PrometheusService) {
     fun onPrometheusMessage(
         @RequestBody data: PrometheusData,
         @PathVariable chatIds: Set<String>,
-        @RequestParam("format", required = false) format: String?
+        @RequestParam("format", required = false) format: String?,
+        @RequestParam("filters", defaultValue = "") filters: Set<String>
     ) {
         logger.debug("Received new message from Prometheus AlertBot for chats $chatIds: $data")
-        prometheusService.sendPrometheusAlert(data, chatIds, format)
+        val filteredData = PrometheusUtils.applyFilters(data, filters)
+        prometheusService.sendPrometheusAlert(filteredData, chatIds, format)
     }
 }
