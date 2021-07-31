@@ -80,13 +80,18 @@ You may receive you telegram chat id using [Telegram IDBot](https://telegram.me/
 
 **Attention**: you chat id may start with `-` or have any other symbols. You shouldn't delete them, you must provide them in URL as well.
 
+Also, you may provide `format` request parameter, to specify message format.
+For example: `http://localhost:8080/prometheus/123,456?format=simple`.
+
+Available formats: `default`, `simple`, `simple_summary`, `detailed`.
+
 Prometheus AlertManager example configuration:
 ```yaml
 receivers:
   - name: telegram-bot
     webhook_configs:
       - send_resolved: true
-        url: http://localhost:8080/prometheus/123,456
+        url: http://localhost:8080/prometheus/123,456?format=simple_summary
 ```
 
 ## Build application

@@ -14,8 +14,12 @@ class PrometheusController(private val prometheusService: PrometheusService) {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping("/prometheus/{chatIds}")
-    fun onPrometheusMessage(@RequestBody data: PrometheusData, @PathVariable chatIds: Set<String>) {
+    fun onPrometheusMessage(
+        @RequestBody data: PrometheusData,
+        @PathVariable chatIds: Set<String>,
+        @RequestParam("format", required = false) format: String?
+    ) {
         logger.debug("Received new message from Prometheus AlertBot for chats $chatIds: $data")
-        prometheusService.sendPrometheusAlert(data, chatIds)
+        prometheusService.sendPrometheusAlert(data, chatIds, format)
     }
 }
