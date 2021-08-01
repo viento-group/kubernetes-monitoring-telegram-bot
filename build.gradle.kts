@@ -15,7 +15,11 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 tasks.getByName<BootBuildImage>("bootBuildImage") {
 	if (System.getenv("PUBLISH_DOCKER_IMAGE") == "true") {
 		isPublish = true
-		imageName = "${System.getenv("PUBLISH_DOCKER_IMAGE_USERNAME")}/${project.name}:${project.version}"
+
+		val imagePrefix = System.getenv("PUBLISH_DOCKER_IMAGE_PREFIX")
+			?: System.getenv("PUBLISH_DOCKER_IMAGE_USERNAME")
+		imageName = "$imagePrefix/${project.name}:${project.version}"
+
 		docker {
 			publishRegistry {
 				username = System.getenv("PUBLISH_DOCKER_IMAGE_USERNAME")

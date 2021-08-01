@@ -32,6 +32,7 @@ jobs:
           PUBLISH_DOCKER_IMAGE: true
           PUBLISH_DOCKER_IMAGE_USERNAME: ${{ secrets.PUBLISH_DOCKER_IMAGE_USERNAME }}
           PUBLISH_DOCKER_IMAGE_PASSWORD: ${{ secrets.PUBLISH_DOCKER_IMAGE_PASSWORD }}
+          PUBLISH_DOCKER_IMAGE_PREFIX: ${{ secrets.PUBLISH_DOCKER_IMAGE_PREFIX }}
         run: ./gradlew bootBuildImage
       - name: Cleanup Gradle Cache
         run: |
