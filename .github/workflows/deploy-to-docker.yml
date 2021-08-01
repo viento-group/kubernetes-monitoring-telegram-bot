@@ -27,7 +27,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Run the Gradle package task
+      - name: Run the Gradle build image
         env:
           PUBLISH_DOCKER_IMAGE: true
           PUBLISH_DOCKER_IMAGE_USERNAME: ${{ secrets.PUBLISH_DOCKER_IMAGE_USERNAME }}
