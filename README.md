@@ -8,10 +8,19 @@ and `kube-prometheus-stack` helm chart version [`17.0.3`](https://artifacthub.io
 
 ## Navigation
 - [Configuration](#configuration)
+    - [Using environment variables](#using-environment-variables)
+    - [Using launch command parameters](#using-launch-command-parameters)
+    - [Using `application.yml` file](#using-applicationyml-file)
 - [API](#api)
+  - [Kubewatch API](#kubewatch-api)
+  - [Prometheus AlertManager API](#prometheus-alertmanager-api)
 - [Messages Examples](#messages-examples)
+  - [Kubewatch Messages](#kubewatch-messages)
+  - [Prometheus Alert Messages](#prometheus-alert-messages)
 - [Build application](#build-application)
 - [Running application](#running-application)
+  - [Using built jar file](#using-built-jar-file)
+  - [Using docker image](#using-docker-image)
 - [Build Docker image](#build-docker-image)
 
 ## Configuration
@@ -113,7 +122,7 @@ receivers:
 - [Kubewatch Message](#kubewatch-message)
 - [Prometheus Alert Message](#prometheus-alert-message)
 
-### Kubewatch Message
+### Kubewatch Messages
 #### `default`
 > A `pod` in namespace `simple-ns` has been `updated`:\
 `kube-system/vpnkit-controller`
@@ -129,7 +138,7 @@ name: **kube-system/vpnkit-controller**\
 namespace: **simple-ns**\
 reason: **updated**
 
-### Prometheus Alert Message
+### Prometheus Alert Messages
 #### `default`
 > **Status: Firing 🔥**\
 \
@@ -190,6 +199,7 @@ Your built jar file will be in `/build/libs/kubernetes-monitoring-telegram-bot-*
 You may also use `./gradlew build -x test` command to build without tests.
 
 ## Running application
+### Using built jar file
 To run application after you have built jar file you may use command:
 ```bash
 $ java -jar ./build/libs/kubernetes-monitoring-telegram-bot-*application-version*.jar
@@ -205,14 +215,23 @@ Or using `--key=value` parameter, for example:
 $ java -jar ./build/libs/kubernetes-monitoring-telegram-bot-0.2.jar --server.port=3000 
 ```
 
+### Using docker image
+Run this command to run application in docker:
+```bash
+$ docker run -d --name telegram-alert-bot \
+       -e TELEGRAM_BOT_TOKEN=<your-telegram-bot-token> \
+       -p 8080:8080 \
+       vientoprojects/kubernetes-monitoring-telegram-bot:1.0
+```
+
 ## Build Docker image
 To build docker image run following command:
 ```bash
-$ ./gradlew bootBuildImage --imageName=viento-group/kubernetes-monitoring-telegram-bot 
+$ ./gradlew bootBuildImage --imageName=vientoprojects/kubernetes-monitoring-telegram-bot:1.0
 ```
 You may use custom `imageName` parameter value.
 
 Then you may use following command to push docker image to docker hub:
 ```bash
-$ docker push docker.io/viento-group/kubernetes-monitoring-telegram-bot:latest 
+$ docker push docker.io/vientoprojects/kubernetes-monitoring-telegram-bot:latest 
 ```
