@@ -33,8 +33,6 @@ jobs:
           PUBLISH_DOCKER_IMAGE_USERNAME: ${{ secrets.PUBLISH_DOCKER_IMAGE_USERNAME }}
           PUBLISH_DOCKER_IMAGE_PASSWORD: ${{ secrets.PUBLISH_DOCKER_IMAGE_PASSWORD }}
         run: ./gradlew bootBuildImage
-      - name: Push to docker hub
-        run: docker push
       - name: Cleanup Gradle Cache
         run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock

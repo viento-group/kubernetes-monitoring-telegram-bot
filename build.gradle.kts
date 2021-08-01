@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "uz.viento"
-version = "0.2"
+version = "1.0"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 tasks.getByName<BootBuildImage>("bootBuildImage") {
