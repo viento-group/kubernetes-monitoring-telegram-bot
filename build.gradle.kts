@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
 plugins {
 	id("org.springframework.boot") version "2.5.3"
@@ -10,6 +11,20 @@ plugins {
 group = "uz.viento"
 version = "0.2"
 java.sourceCompatibility = JavaVersion.VERSION_11
+
+tasks.getByName<BootBuildImage>("bootBuildImage") {
+	if (System.getenv("PUBLISH_DOCKER_IMAGE") == "true") {
+		isPublish = true
+		imageName = "${System.getenv("PUBLISH_DOCKER_IMAGE_USERNAME")}/${project.name}:${project.version}"
+		docker {
+			publishRegistry {
+				username = System.getenv("PUBLISH_DOCKER_IMAGE_USERNAME")
+				password = System.getenv("PUBLISH_DOCKER_IMAGE_PASSWORD")
+				url = System.getenv("PUBLISH_DOCKER_IMAGE_URL") ?: "docker.io"
+			}
+		}
+	}
+}
 
 repositories {
 	mavenCentral()
