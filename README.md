@@ -21,6 +21,8 @@ and `kube-prometheus-stack` helm chart version [`17.0.3`](https://artifacthub.io
 - [Running application](#running-application)
   - [Using built jar file](#using-built-jar-file)
   - [Using docker image](#using-docker-image)
+  - [Using Kubernetes (helm)](#using-kubernetes-helm)
+  - [Using Kubernetes (custom-configuration)](#using-kubernetes-custom-configuration)
 - [Build Docker image](#build-docker-image)
 
 ## Configuration
@@ -222,6 +224,69 @@ $ docker run -d --name telegram-alert-bot \
        -e TELEGRAM_BOT_TOKEN=<your-telegram-bot-token> \
        -p 8080:8080 \
        vientoprojects/kubernetes-monitoring-telegram-bot
+```
+
+### Using Kubernetes (helm)
+Use [viento-group official helm chart](https://github.com/viento-group/helm-charts/tree/master/charts/kube-monitoring-telegram-bot) for deploying kubernetes-monitoring-telegram-bot to your kubernetes cluster.
+
+Here is an example for deploying application:
+```bash
+$ helm repo add viento-group https://viento-group.github.io/helm-charts
+$ helm repo update
+$ helm install telegram-bot viento-group/kube-monitoring-telegram-bot --set telegramBot.globalBotToken.use=true --set telegramBot.globalBotToken.token=<telegram-bot-token>
+```
+
+### Using Kubernetes (custom configuration)
+You may use follow example for running application (you need to modify telegram bot token in secret):
+```yaml
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: telegram-alert-bot-secret
+data:
+  telegramToken: <telegram-bot-token-base64>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegram-alert-bot-deployment
+  labels:
+    app: telegram-alert-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telegram-alert-bot
+  template:
+    metadata:
+      labels:
+        app: telegram-alert-bot
+    spec:
+      containers:
+      - name: telegram-alert-bot
+        image: docker.io/vientoprojects/kubernetes-monitoring-telegram-bot
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: TELEGRAM_BOT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: telegram-alert-bot-secret
+              key: telegramToken
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: telegram-alert-bot-service
+spec:
+  selector:
+    app: telegram-alert-bot
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
 ```
 
 ## Build Docker image
