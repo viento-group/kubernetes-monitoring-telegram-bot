@@ -34,6 +34,14 @@ jobs:
           PUBLISH_DOCKER_IMAGE_PASSWORD: ${{ secrets.PUBLISH_DOCKER_IMAGE_PASSWORD }}
           PUBLISH_DOCKER_IMAGE_PREFIX: ${{ secrets.PUBLISH_DOCKER_IMAGE_PREFIX }}
         run: ./gradlew bootBuildImage
+      - name: Run the Gradle build image with latest tag
+        env:
+          PUBLISH_DOCKER_IMAGE: true
+          PUBLISH_DOCKER_IMAGE_USERNAME: ${{ secrets.PUBLISH_DOCKER_IMAGE_USERNAME }}
+          PUBLISH_DOCKER_IMAGE_PASSWORD: ${{ secrets.PUBLISH_DOCKER_IMAGE_PASSWORD }}
+          PUBLISH_DOCKER_IMAGE_PREFIX: ${{ secrets.PUBLISH_DOCKER_IMAGE_PREFIX }}
+          PUBLISH_DOCKER_IMAGE_TAG: latest
+        run: ./gradlew bootBuildImage
       - name: Cleanup Gradle Cache
         run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock

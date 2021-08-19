@@ -18,7 +18,8 @@ tasks.getByName<BootBuildImage>("bootBuildImage") {
 
 		val imagePrefix = System.getenv("PUBLISH_DOCKER_IMAGE_PREFIX")
 			?: System.getenv("PUBLISH_DOCKER_IMAGE_USERNAME")
-		imageName = "$imagePrefix/${project.name}:${project.version}"
+		val imageTag = System.getenv("PUBLISH_DOCKER_IMAGE_TAG") ?: project.version
+		imageName = "$imagePrefix/${project.name}:$imageTag"
 
 		docker {
 			publishRegistry {

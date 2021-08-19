@@ -221,7 +221,7 @@ Run this command to run application in docker:
 $ docker run -d --name telegram-alert-bot \
        -e TELEGRAM_BOT_TOKEN=<your-telegram-bot-token> \
        -p 8080:8080 \
-       vientoprojects/kubernetes-monitoring-telegram-bot:1.0
+       vientoprojects/kubernetes-monitoring-telegram-bot
 ```
 
 ## Build Docker image
